@@ -4,6 +4,7 @@ import com.thalesgroup.rtti._2007_10_10.ldb.commontypes.FilterType
 import com.thalesgroup.rtti._2013_11_28.token.types.AccessToken
 import com.thalesgroup.rtti._2017_10_01.ldb.GetBoardRequestParams
 import com.thalesgroup.rtti._2017_10_01.ldb.LDBServiceSoap
+import com.thalesgroup.rtti._2017_10_01.ldb.types.ServiceItemWithCallingPoints
 
 typealias GetTrains = (
         departureStation: String,
@@ -18,9 +19,25 @@ fun createGetTrains(ldbService: LDBServiceSoap, accessToken: AccessToken): GetTr
             filterType = FilterType.TO
 
         }
-        ldbService.getDepBoardWithDetails(requestParams, accessToken)
-        emptyList()
+        val response = ldbService.getDepBoardWithDetails(requestParams, accessToken)
+
+        response.getStationBoardResult
+                .trainServices
+                .service
+                .map { mapTrain(it) }
     }
 }
 
-class Train
+private fun mapTrain(service: ServiceItemWithCallingPoints) = Train(
+        scheduledTimeOfDeparture = service.std,
+        estimatedTimeOfDeparture = service.etd,
+        isCancelled = service.isIsCancelled ?: false,
+        isCancelledAtDestination = service.isFilterLocationCancelled ?: false
+)
+
+data class Train(
+        val scheduledTimeOfDeparture: String?,
+        val estimatedTimeOfDeparture: String?,
+        val isCancelled: Boolean,
+        val isCancelledAtDestination: Boolean
+)
