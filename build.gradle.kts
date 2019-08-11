@@ -31,6 +31,7 @@ dependencies {
     testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.17")
     testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
     testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
+    testImplementation("io.mockk:mockk:1.9.3")
     testImplementation(gradleTestKit())
 }
 
