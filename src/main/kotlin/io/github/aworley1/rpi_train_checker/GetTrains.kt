@@ -35,9 +35,3 @@ private fun mapTrain(service: ServiceItemWithCallingPoints) = Train(
         isCancelledAtDestination = service.isFilterLocationCancelled ?: false
 )
 
-data class Train(
-        val scheduledTimeOfDeparture: String?,
-        val estimatedTimeOfDeparture: String?,
-        val isCancelled: Boolean,
-        val isCancelledAtDestination: Boolean
-)
