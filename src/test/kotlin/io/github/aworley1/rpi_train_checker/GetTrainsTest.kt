@@ -2,6 +2,7 @@ package io.github.aworley1.rpi_train_checker
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import com.thalesgroup.rtti._2007_10_10.ldb.commontypes.FilterType
 import com.thalesgroup.rtti._2013_11_28.token.types.AccessToken
 import com.thalesgroup.rtti._2017_10_01.ldb.GetBoardRequestParams
 import com.thalesgroup.rtti._2017_10_01.ldb.LDBServiceSoap
@@ -30,7 +31,7 @@ object GetTrainsTest : Spek({
 
         val getTrains = createGetTrains(ldbServiceSoap, accessToken)
 
-        getTrains("HFN")
+        getTrains("HFN", "HHY")
 
         it("should call LdbService with correct access token") {
             assertThat(capturedAccessToken.captured.tokenValue).isEqualTo("test-token-value")
@@ -38,6 +39,11 @@ object GetTrainsTest : Spek({
 
         it("should call LdbService with correct departure station") {
             assertThat(capturedParameters.captured.crs).isEqualTo("HFN")
+        }
+
+        it("should call LdbService with correct destination station") {
+            assertThat(capturedParameters.captured.filterCrs).isEqualTo("HHY")
+            assertThat(capturedParameters.captured.filterType).isEqualTo(FilterType.TO)
         }
     }
 })
