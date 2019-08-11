@@ -5,4 +5,13 @@ data class Train(
         val estimatedTimeOfDeparture: String?,
         val isCancelled: Boolean,
         val isCancelledAtDestination: Boolean
-)
+) {
+    fun hasIssues(): Boolean {
+        return when {
+            isCancelled -> true
+            isCancelledAtDestination -> true
+            estimatedTimeOfDeparture != "On time" -> true
+            else -> false
+        }
+    }
+}
