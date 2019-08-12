@@ -2,9 +2,13 @@ package io.github.aworley1.rpi_train_checker
 
 import io.github.aworley1.rpi_train_checker.TrainStatus.CANCELLED
 import io.github.aworley1.rpi_train_checker.TrainStatus.DELAYED_OVER_THRESHOLD
+import io.github.aworley1.rpi_train_checker.TrainStatus.DELAYED_UNDER_THRESHOLD
 import io.github.aworley1.rpi_train_checker.TrainStatus.ON_TIME
 import io.github.aworley1.rpi_train_checker.TrainStatus.UNKNOWN
+import java.time.Duration
 import java.time.LocalTime
+
+const val DELAY_THRESHOLD = 2
 
 data class Train(
         val scheduledTimeOfDeparture: String?,
@@ -18,7 +22,20 @@ data class Train(
             isCancelledAtDestination -> CANCELLED
             estimatedTimeOfDeparture.equals("On time", true) -> ON_TIME
             !estimatedTimeOfDeparture.isTime() -> DELAYED_OVER_THRESHOLD
+            hasDelayUnderThreshold() -> DELAYED_UNDER_THRESHOLD
             else -> UNKNOWN
+        }
+    }
+
+    private fun hasDelayUnderThreshold(): Boolean {
+        if (scheduledTimeOfDeparture.isTime() && estimatedTimeOfDeparture.isTime()) {
+            val delay = Duration.between(scheduledTimeOfDeparture!!.toTime(), estimatedTimeOfDeparture!!.toTime())
+                    .toMinutes()
+                    .toInt()
+
+            return delay <= DELAY_THRESHOLD
+        } else {
+            return false
         }
     }
 }
@@ -32,11 +49,14 @@ enum class TrainStatus {
 }
 
 private fun String?.isTime(): Boolean {
-    try {
+    return if (this?.toTime() != null) true else false
+}
+
+private fun String.toTime(): LocalTime? {
+    return try {
         LocalTime.parse(this)
     } catch (e: Exception) {
-        return false
+        return null
     }
-
-    return true
 }
+

@@ -4,6 +4,7 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import io.github.aworley1.rpi_train_checker.TrainStatus.CANCELLED
 import io.github.aworley1.rpi_train_checker.TrainStatus.DELAYED_OVER_THRESHOLD
+import io.github.aworley1.rpi_train_checker.TrainStatus.DELAYED_UNDER_THRESHOLD
 import io.github.aworley1.rpi_train_checker.TrainStatus.ON_TIME
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -52,6 +53,17 @@ object TrainTest : Spek({
             )
 
             assertThat(train.getStatus()).isEqualTo(DELAYED_OVER_THRESHOLD)
+        }
+
+        it("should determine when train is delayed by less than threshold") {
+            val train = Train(
+                    scheduledTimeOfDeparture = "15:16",
+                    estimatedTimeOfDeparture = "15:18",
+                    isCancelled = false,
+                    isCancelledAtDestination = false
+            )
+
+            assertThat(train.getStatus()).isEqualTo(DELAYED_UNDER_THRESHOLD)
         }
     }
 })
