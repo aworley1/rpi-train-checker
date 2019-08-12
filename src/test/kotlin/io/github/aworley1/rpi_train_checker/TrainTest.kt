@@ -10,7 +10,7 @@ import org.spekframework.spek2.style.specification.describe
 
 object TrainTest : Spek({
     describe("Train") {
-        it("should determine when there are no issues") {
+        it("should determine when train is on time") {
             val train = Train(
                     scheduledTimeOfDeparture = "15:16",
                     estimatedTimeOfDeparture = "On time",
@@ -21,7 +21,7 @@ object TrainTest : Spek({
             assertThat(train.getStatus()).isEqualTo(ON_TIME)
         }
 
-        it("should have issues when cancelled") {
+        it("should determine when train is cancelled") {
             val train = Train(
                     scheduledTimeOfDeparture = "15:16",
                     estimatedTimeOfDeparture = "On time",
@@ -32,7 +32,7 @@ object TrainTest : Spek({
             assertThat(train.getStatus()).isEqualTo(CANCELLED)
         }
 
-        it("should have issues when cancelled at destination") {
+        it("should determine when train is cancelled at destination") {
             val train = Train(
                     scheduledTimeOfDeparture = "15:16",
                     estimatedTimeOfDeparture = "On time",
@@ -43,7 +43,7 @@ object TrainTest : Spek({
             assertThat(train.getStatus()).isEqualTo(CANCELLED)
         }
 
-        it("should have issues when train is not on time") {
+        it("should determine when train is delayed by indeterminate amount") {
             val train = Train(
                     scheduledTimeOfDeparture = "15:16",
                     estimatedTimeOfDeparture = "Blobby",
