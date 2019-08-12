@@ -1,8 +1,10 @@
 package io.github.aworley1.rpi_train_checker
 
 import assertk.assertThat
-import assertk.assertions.isFalse
-import assertk.assertions.isTrue
+import assertk.assertions.isEqualTo
+import io.github.aworley1.rpi_train_checker.TrainStatus.CANCELLED
+import io.github.aworley1.rpi_train_checker.TrainStatus.DELAYED_OVER_THRESHOLD
+import io.github.aworley1.rpi_train_checker.TrainStatus.ON_TIME
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -16,7 +18,7 @@ object TrainTest : Spek({
                     isCancelledAtDestination = false
             )
 
-            assertThat(train.hasIssues()).isFalse()
+            assertThat(train.getStatus()).isEqualTo(ON_TIME)
         }
 
         it("should have issues when cancelled") {
@@ -27,7 +29,7 @@ object TrainTest : Spek({
                     isCancelledAtDestination = false
             )
 
-            assertThat(train.hasIssues()).isTrue()
+            assertThat(train.getStatus()).isEqualTo(CANCELLED)
         }
 
         it("should have issues when cancelled at destination") {
@@ -38,7 +40,7 @@ object TrainTest : Spek({
                     isCancelledAtDestination = true
             )
 
-            assertThat(train.hasIssues()).isTrue()
+            assertThat(train.getStatus()).isEqualTo(CANCELLED)
         }
 
         it("should have issues when train is not on time") {
@@ -49,7 +51,7 @@ object TrainTest : Spek({
                     isCancelledAtDestination = false
             )
 
-            assertThat(train.hasIssues()).isTrue()
+            assertThat(train.getStatus()).isEqualTo(DELAYED_OVER_THRESHOLD)
         }
     }
 })
