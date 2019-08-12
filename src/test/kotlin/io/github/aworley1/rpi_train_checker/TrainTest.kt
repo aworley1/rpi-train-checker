@@ -65,5 +65,16 @@ object TrainTest : Spek({
 
             assertThat(train.getStatus()).isEqualTo(DELAYED_UNDER_THRESHOLD)
         }
+
+        it("should determine when train is delayed by more than threshold") {
+            val train = Train(
+                    scheduledTimeOfDeparture = "15:16",
+                    estimatedTimeOfDeparture = "15:19",
+                    isCancelled = false,
+                    isCancelledAtDestination = false
+            )
+
+            assertThat(train.getStatus()).isEqualTo(DELAYED_OVER_THRESHOLD)
+        }
     }
 })

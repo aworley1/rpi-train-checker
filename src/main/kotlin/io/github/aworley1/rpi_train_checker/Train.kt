@@ -23,6 +23,7 @@ data class Train(
             estimatedTimeOfDeparture.equals("On time", true) -> ON_TIME
             !estimatedTimeOfDeparture.isTime() -> DELAYED_OVER_THRESHOLD
             hasDelayUnderThreshold() -> DELAYED_UNDER_THRESHOLD
+            hasDelayOverThreshold() -> DELAYED_OVER_THRESHOLD
             else -> UNKNOWN
         }
     }
@@ -34,6 +35,18 @@ data class Train(
                     .toInt()
 
             return delay <= DELAY_THRESHOLD
+        } else {
+            return false
+        }
+    }
+
+    private fun hasDelayOverThreshold(): Boolean {
+        if (scheduledTimeOfDeparture.isTime() && estimatedTimeOfDeparture.isTime()) {
+            val delay = Duration.between(scheduledTimeOfDeparture!!.toTime(), estimatedTimeOfDeparture!!.toTime())
+                    .toMinutes()
+                    .toInt()
+
+            return delay > DELAY_THRESHOLD
         } else {
             return false
         }
