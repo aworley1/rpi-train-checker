@@ -28,29 +28,38 @@ data class Train(
         }
     }
 
-    private fun hasDelayUnderThreshold(): Boolean {
-        if (scheduledTimeOfDeparture.isTime() && estimatedTimeOfDeparture.isTime()) {
-            val delay = Duration.between(scheduledTimeOfDeparture!!.toTime(), estimatedTimeOfDeparture!!.toTime())
-                    .toMinutes()
-                    .toInt()
+    private fun calculateDelay(): Int? {
+        val scheduledTimeOfDepartureTime = scheduledTimeOfDeparture?.toTime()
+        val estimatedTimeOfDepartureTime = estimatedTimeOfDeparture?.toTime()
 
-            return delay <= DELAY_THRESHOLD
-        } else {
-            return false
+        if (scheduledTimeOfDepartureTime == null || estimatedTimeOfDepartureTime == null) {
+            return null
+        }
+
+        return Duration.between(scheduledTimeOfDepartureTime, estimatedTimeOfDepartureTime)
+                .toMinutes()
+                .toInt()
+
+    }
+
+    private fun hasDelayUnderThreshold(): Boolean {
+        val delay = calculateDelay()
+        return when {
+            delay == null -> false
+            delay <= DELAY_THRESHOLD -> true
+            else -> false
         }
     }
 
     private fun hasDelayOverThreshold(): Boolean {
-        if (scheduledTimeOfDeparture.isTime() && estimatedTimeOfDeparture.isTime()) {
-            val delay = Duration.between(scheduledTimeOfDeparture!!.toTime(), estimatedTimeOfDeparture!!.toTime())
-                    .toMinutes()
-                    .toInt()
-
-            return delay > DELAY_THRESHOLD
-        } else {
-            return false
+        val delay = calculateDelay()
+        return when {
+            delay == null -> false
+            delay > DELAY_THRESHOLD -> true
+            else -> false
         }
     }
+
 }
 
 enum class TrainStatus {
