@@ -7,11 +7,10 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.time.Clock
 import java.time.Instant
-import java.time.ZoneId
 
 val ELEVEN_AM_CLOCK = Clock.fixed(
         Instant.parse("2015-01-01T11:00:00Z"),
-        ZoneId.of("Europe/London")
+        TIMEZONE
 )
 
 object ProblemDeterminerTest : Spek({

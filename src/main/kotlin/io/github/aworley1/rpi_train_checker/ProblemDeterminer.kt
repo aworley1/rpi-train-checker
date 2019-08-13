@@ -3,7 +3,6 @@ package io.github.aworley1.rpi_train_checker
 import java.time.Clock
 import java.time.Duration
 import java.time.LocalTime
-import java.time.ZoneId
 import java.time.ZonedDateTime
 
 typealias ProblemDeterminer = (times: List<String>) -> Unit
@@ -14,8 +13,8 @@ fun createProblemDeterminer(
         getTrains: GetTrains,
         clock: Clock
 ): ProblemDeterminer {
-    return {requestedTrains ->
-        val currentTime = ZonedDateTime.ofInstant(clock.instant(), ZoneId.of("Europe/London")).toLocalTime()
+    return { requestedTrains ->
+        val currentTime = ZonedDateTime.ofInstant(clock.instant(), TIMEZONE).toLocalTime()
 
         val requestedTimes = requestedTrains
                 .map { LocalTime.parse(it) }
