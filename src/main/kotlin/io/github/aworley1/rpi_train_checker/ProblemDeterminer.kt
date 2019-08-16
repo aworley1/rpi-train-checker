@@ -15,26 +15,35 @@ fun createProblemDeterminer(
         getTrains: GetTrains,
         clock: Clock
 ): ProblemDeterminer {
-    return determine@{ requestedTrains ->
+    return determiner@{ requestedTrainTimes ->
         val currentTime = ZonedDateTime.ofInstant(clock.instant(), TIMEZONE).toLocalTime()
 
-        val requestedTimesWithinThreshold = requestedTrains
+        val requestedTimesWithinThreshold = requestedTrainTimes
                 .map { LocalTime.parse(it) }
                 .filter { withinThreshold(it, currentTime) }
 
         if (requestedTimesWithinThreshold.isEmpty()) {
-            return@determine NO_PROBLEM
+            return@determiner NO_PROBLEM
         }
 
         val trains = getTrains(departureStation, destinationStation)
 
-        return@determine when {
-            !requestedTimesWithinThreshold.all { trains.hasTime(it) } -> PROBLEM
+        val requestedTrains = trains.filter { requestedTrainTimes.contains(it.scheduledTimeOfDeparture) }
+
+        return@determiner when {
+            allRequestedTrainsNotReturned(requestedTimesWithinThreshold, trains) -> PROBLEM
+            requestedTrains.notAllOnTime() -> PROBLEM
             else -> NO_PROBLEM
         }
 
     }
 }
+
+private fun List<Train>.notAllOnTime() =
+        !this.all { it.getStatus() == TrainStatus.ON_TIME }
+
+private fun allRequestedTrainsNotReturned(requestedTimes: List<LocalTime>, trains: List<Train>) =
+        !requestedTimes.all { trains.hasTime(it) }
 
 private fun List<Train>.hasTime(time: LocalTime) =
         this.any { it.scheduledTimeOfDeparture == time.toString() }

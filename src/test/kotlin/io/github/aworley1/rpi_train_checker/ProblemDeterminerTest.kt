@@ -22,7 +22,7 @@ object ProblemDeterminerTest : Spek({
         val problemDeterminer = createProblemDeterminer(
                 "departure-station",
                 "destination-station",
-                mockGetTrains.mockGetTrains,
+                mockGetTrains.mockGetOnTimeTrains,
                 ELEVEN_AM_CLOCK
         )
 
@@ -48,7 +48,7 @@ object ProblemDeterminerTest : Spek({
         val problemDeterminer = createProblemDeterminer(
                 "departure-station",
                 "destination-station",
-                mockGetTrains.mockGetTrains,
+                mockGetTrains.mockGetOnTimeTrains,
                 ELEVEN_AM_CLOCK
         )
 
@@ -64,7 +64,7 @@ object ProblemDeterminerTest : Spek({
         val problemDeterminer = createProblemDeterminer(
                 "departure-station",
                 "destination-station",
-                mockGetTrains.mockGetTrains,
+                mockGetTrains.mockGetOnTimeTrains,
                 ELEVEN_AM_CLOCK
         )
 
@@ -79,18 +79,74 @@ object ProblemDeterminerTest : Spek({
             assertThat(result).isEqualTo(NO_PROBLEM)
         }
     }
+
+    describe("Given trains are returned") {
+        it("should return no problem status when all trains are on time") {
+            val times = listOf("11:23", "11:32")
+            val mockGetTrains = MockGetTrains()
+            val problemDeterminer = createProblemDeterminer(
+                    "departure-station",
+                    "destination-station",
+                    mockGetTrains.mockGetOnTimeTrains,
+                    ELEVEN_AM_CLOCK
+            )
+
+            val result = problemDeterminer(times)
+
+            assertThat(result).isEqualTo(NO_PROBLEM)
+        }
+
+        it("should return problem status when a requested train is cancelled") {
+            val times = listOf("11:23", "11:32")
+            val mockGetTrains = MockGetTrains()
+            val problemDeterminer = createProblemDeterminer(
+                    "departure-station",
+                    "destination-station",
+                    mockGetTrains.mockTrainsWithOneCancelled,
+                    ELEVEN_AM_CLOCK
+            )
+
+            val result = problemDeterminer(times)
+
+            assertThat(result).isEqualTo(PROBLEM)
+        }
+    }
 })
 
 class MockGetTrains {
     var wasCalledWith: Stations? = null
 
-    val mockGetTrains: GetTrains = { departureStation, destinationStation ->
+    val mockGetOnTimeTrains: GetTrains = { departureStation, destinationStation ->
         wasCalledWith = Stations(departureStation, destinationStation)
         listOf(
                 Train(
                         scheduledTimeOfDeparture = "11:23",
                         estimatedTimeOfDeparture = "On time",
                         isCancelled = false,
+                        isCancelledAtDestination = false
+                ),
+                Train(
+                        scheduledTimeOfDeparture = "11:32",
+                        estimatedTimeOfDeparture = "On time",
+                        isCancelled = false,
+                        isCancelledAtDestination = false
+                )
+        )
+    }
+
+    val mockTrainsWithOneCancelled: GetTrains = { departureStation, destinationStation ->
+        wasCalledWith = Stations(departureStation, destinationStation)
+        listOf(
+                Train(
+                        scheduledTimeOfDeparture = "11:23",
+                        estimatedTimeOfDeparture = "On time",
+                        isCancelled = false,
+                        isCancelledAtDestination = false
+                ),
+                Train(
+                        scheduledTimeOfDeparture = "11:32",
+                        estimatedTimeOfDeparture = "Cancelled",
+                        isCancelled = true,
                         isCancelledAtDestination = false
                 )
         )
