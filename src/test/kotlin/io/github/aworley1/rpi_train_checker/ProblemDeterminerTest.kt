@@ -59,7 +59,7 @@ object ProblemDeterminerTest : Spek({
     }
 
     describe("Given there are NO trains requested within the next hour") {
-        val times = listOf("15:00")
+        val times = listOf("10:30", "15:00")
         val mockGetTrains = MockGetTrains()
         val problemDeterminer = createProblemDeterminer(
                 "departure-station",
