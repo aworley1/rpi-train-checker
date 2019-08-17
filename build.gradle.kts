@@ -12,7 +12,7 @@ buildscript {
 
 plugins {
     id("org.jetbrains.kotlin.jvm").version("1.3.41")
-//    id("application")
+    id("application")
 }
 
 repositories {
@@ -45,6 +45,10 @@ tasks.withType<Test> {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "12"
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+application {
+    mainClassName = "io.github.aworley1.rpi_train_checker.MainKt"
 }
 
