@@ -26,6 +26,8 @@ dependencies {
     implementation("org.glassfish.jaxb:txw2:2.3.2")
     implementation("com.sun.xml.ws:jaxws-rt:2.3.2")
 
+    implementation("com.pi4j:pi4j-core:1.1")
+
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
     testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.17")
