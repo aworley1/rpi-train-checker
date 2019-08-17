@@ -9,10 +9,10 @@ import java.time.ZoneId
 val TIMEZONE = ZoneId.of("Europe/London")
 
 fun main() {
-    val requestedTimes = System.getProperty("TRAINS_REQUESTED_TIMES").split(",")
-    val departureStation = System.getProperty("TRAINS_DEPARTURE_STATION")
-    val destinationStation = System.getProperty("TRAINS_DESTINATION_STATION")
-    val accessToken = System.getProperty("TRAINS_ACCESS_TOKEN")
+    val requestedTimes = System.getenv("TRAINS_REQUESTED_TIMES").split(",")
+    val departureStation = System.getenv("TRAINS_DEPARTURE_STATION")
+    val destinationStation = System.getenv("TRAINS_DESTINATION_STATION")
+    val accessToken = System.getenv("TRAINS_ACCESS_TOKEN")
 
     val statusReporter = createStatusReporter(GpioFactory.getInstance())
 
