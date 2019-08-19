@@ -17,7 +17,7 @@ val ELEVEN_AM_CLOCK = Clock.fixed(
 )
 
 object ProblemDeterminerTest : Spek({
-    describe("Given there are trains requested within the next hour") {
+    describe("Given there are trains requested within the next 90 mins") {
         val times = listOf("11:23")
         val mockGetTrains = MockGetTrains()
         val problemDeterminer = createProblemDeterminer(
@@ -59,7 +59,7 @@ object ProblemDeterminerTest : Spek({
         }
     }
 
-    describe("Given there are NO trains requested within the next hour") {
+    describe("Given there are NO trains requested within the next 90 mins") {
         val times = listOf("10:30", "15:00")
         val mockGetTrains = MockGetTrains()
         val problemDeterminer = createProblemDeterminer(
