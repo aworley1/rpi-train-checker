@@ -49,8 +49,7 @@ private fun List<Train>.hasTime(time: LocalTime) =
         this.any { it.scheduledTimeOfDeparture == time.toString() }
 
 private fun withinThreshold(time: LocalTime, currentTime: LocalTime): Boolean {
-    return Duration.between(currentTime, time).toMinutes() <= 60L
-            && Duration.between(currentTime, time).toMinutes() >= 0L
+    return Duration.between(currentTime, time).toMinutes() in 0L..60L
 }
 
 enum class ProblemStatus {
