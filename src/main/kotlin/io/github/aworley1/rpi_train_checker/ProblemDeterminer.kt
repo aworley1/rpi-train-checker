@@ -1,6 +1,7 @@
 package io.github.aworley1.rpi_train_checker
 
 import io.github.aworley1.rpi_train_checker.ProblemStatus.NO_PROBLEM
+import io.github.aworley1.rpi_train_checker.ProblemStatus.NO_TRAINS_REQUESTED
 import io.github.aworley1.rpi_train_checker.ProblemStatus.PROBLEM
 import java.time.Clock
 import java.time.Duration
@@ -23,7 +24,7 @@ fun createProblemDeterminer(
                 .filter { withinThreshold(it, currentTime) }
 
         if (requestedTimesWithinThreshold.isEmpty()) {
-            return@determiner NO_PROBLEM
+            return@determiner NO_TRAINS_REQUESTED
         }
 
         val trains = getTrains(departureStation, destinationStation)
@@ -54,5 +55,6 @@ private fun withinThreshold(time: LocalTime, currentTime: LocalTime): Boolean {
 
 enum class ProblemStatus {
     PROBLEM,
-    NO_PROBLEM
+    NO_PROBLEM,
+    NO_TRAINS_REQUESTED
 }

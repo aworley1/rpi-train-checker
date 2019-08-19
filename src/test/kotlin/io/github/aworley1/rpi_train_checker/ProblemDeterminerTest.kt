@@ -5,6 +5,7 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isNull
 import io.github.aworley1.rpi_train_checker.ProblemStatus.NO_PROBLEM
 import io.github.aworley1.rpi_train_checker.ProblemStatus.PROBLEM
+import io.github.aworley1.rpi_train_checker.ProblemStatus.NO_TRAINS_REQUESTED
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.time.Clock
@@ -76,7 +77,7 @@ object ProblemDeterminerTest : Spek({
         }
 
         it("should return no problem") {
-            assertThat(result).isEqualTo(NO_PROBLEM)
+            assertThat(result).isEqualTo(NO_TRAINS_REQUESTED)
         }
     }
 
