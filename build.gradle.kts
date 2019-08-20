@@ -14,6 +14,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm").version("1.3.41")
     id("application")
     id("com.github.johnrengelman.shadow").version("5.1.0")
+    id("com.google.cloud.tools.jib").version("1.4.0")
 }
 
 repositories {
@@ -51,5 +52,22 @@ tasks.withType<KotlinCompile> {
 
 application {
     mainClassName = "io.github.aworley1.rpi_train_checker.MainKt"
+}
+
+jib {
+    container {
+        mainClass = application.mainClassName
+    }
+    from {
+        image = "azul/zulu-openjdk-alpine:12"
+    }
+    to {
+        image = "aworley1/rpi-train-checker:latest"
+        auth {
+            username = System.getenv("DOCKER_HUB_USERNAME")
+            password = System.getenv("DOCKER_HUB_PASSWORD")
+        }
+        tags = setOf(System.getenv("CI_COMMIT_SHORT_SHA"))
+    }
 }
 

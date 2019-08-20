@@ -1,0 +1,15 @@
+stages:
+  - build
+
+build:
+  stage: build
+  image: azul/zulu-openjdk-alpine:12
+  script:
+    - ./gradlew clean test build jib
+  artifacts:
+    when:
+      on_failure
+    paths:
+      - build/reports/
+  only:
+    - master
