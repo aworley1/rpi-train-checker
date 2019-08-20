@@ -59,7 +59,7 @@ jib {
         mainClass = application.mainClassName
     }
     from {
-        image = "azul/zulu-openjdk-alpine:12"
+        image = "openjdk:12-alpine"
     }
     to {
         image = "registry.hub.docker.com/aworley1/rpi-train-checker:latest"
