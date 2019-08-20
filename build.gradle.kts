@@ -62,7 +62,7 @@ jib {
         image = "azul/zulu-openjdk-alpine:12"
     }
     to {
-        image = "aworley1/rpi-train-checker:latest"
+        image = "registry.hub.docker.com/aworley1/rpi-train-checker:latest"
         auth {
             username = System.getenv("DOCKER_HUB_USERNAME")
             password = System.getenv("DOCKER_HUB_PASSWORD")
