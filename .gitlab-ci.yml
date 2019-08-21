@@ -15,14 +15,15 @@ build:
 
 build-docker:
   stage: build-docker
-  image: docker:test
+  image: docker:stable
   services:
-    - name: docker:test-dind
-      command: ["--experimental"]
+    - docker:stable-dind
   variables:
     DOCKER_CLI_EXPERIMENTAL: enabled
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: "/certs"
   script:
     - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
-    - docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t aworley1/rpi-train-checker:latest -t aworley1/rpi-train-checker:$CI_COMMIT_SHORT_SHA --push .
+    - docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t aworley1/rpi-train-checker:latest -t aworley1/rpi-train-checker:$CI_COMMIT_SHORT_SHA .
+    - docker push aworley1/rpi-train-checker:latest
+    - docker push aworley1/rpi-train-checker:$CI_COMMIT_SHORT_SHA
