@@ -54,6 +54,10 @@ application {
     mainClassName = "io.github.aworley1.rpi_train_checker.MainKt"
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+}
+
 jib {
     container {
         mainClass = application.mainClassName
