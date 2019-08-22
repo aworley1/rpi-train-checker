@@ -1,28 +1,13 @@
 stages:
   - build
-  - build-docker
 
 build:
   stage: build
   image: azul/zulu-openjdk-alpine:12
   script:
-    - ./gradlew --no-daemon clean test build
+    - ./gradlew --no-daemon clean test build jib
   artifacts:
     paths:
       - build/
   only:
     - master
-
-build-docker:
-  stage: build-docker
-  image: docker:stable
-  services:
-    - docker:stable-dind
-  variables:
-    DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: "/certs"
-  script:
-    - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
-    - docker build -t aworley1/rpi-train-checker:latest -t aworley1/rpi-train-checker:$CI_COMMIT_SHORT_SHA .
-    - docker push aworley1/rpi-train-checker:latest
-    - docker push aworley1/rpi-train-checker:$CI_COMMIT_SHORT_SHA

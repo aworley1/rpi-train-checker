@@ -59,7 +59,7 @@ jib {
         mainClass = application.mainClassName
     }
     from {
-        image = "openjdk:12-alpine"
+        image = "balenalib/raspberrypi3-alpine-openjdk"
     }
     to {
         image = "registry.hub.docker.com/aworley1/rpi-train-checker:latest"
